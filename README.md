@@ -24,3 +24,6 @@ Każda nowa zmiana wypchnięta na gałąź `main` automatycznie aktualizuje stro
 
 ## Własna domena (później)
 Kup domenę (np. `krajewskastudio.pl`, ok. 50 zł/rok, np. w OVH lub home.pl). Potem w **Settings → Pages → Custom domain** wpisz jej nazwę i ustaw rekordy DNS według instrukcji GitHuba.
+
+## Bot „Efekty” na Telegramie
+Folder `bot/` zawiera bota, przez którego Ola publikuje wpisy w sekcji **Efekty** prosto z telefonu (zdjęcie + krótki opis → tekst pisany przez AI → zatwierdzenie → publikacja). Instrukcja uruchomienia: [`bot/README.md`](bot/README.md).

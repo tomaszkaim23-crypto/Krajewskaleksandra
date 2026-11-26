@@ -1,0 +1,157 @@
+import type { Post } from "./ai";
+
+export interface PostEntry {
+  slug: string;
+  title: string;
+  lead: string;
+  treatment: string;
+  date: string; // YYYY-MM-DD
+  image: string; // path relative to site root, e.g. efekty/img/slug.jpg
+  image_alt: string;
+}
+
+const BOOKSY = "https://booksy.com/pl-pl/dl/show-business/313287";
+const PHONE = "+48533292100";
+
+export const esc = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+const MONTHS = ["stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia"];
+export const plDate = (iso: string) => {
+  const [y, m, d] = iso.split("-").map(Number);
+  return `${d} ${MONTHS[m - 1]} ${y}`;
+};
+
+export function slugify(s: string): string {
+  const map: Record<string, string> = { ą: "a", ć: "c", ę: "e", ł: "l", ń: "n", ó: "o", ś: "s", ź: "z", ż: "z" };
+  return s
+    .toLowerCase()
+    .replace(/[ąćęłńóśźż]/g, (c) => map[c])
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 60)
+    .replace(/-+$/g, "") || "efekt";
+}
+
+const CSS = `
+:root{--bg:#fbf7f4;--bg-alt:#f3ebe5;--card:#fff;--ink:#2b1f24;--muted:#6f6166;--accent:#7a3b52;--accent-soft:#efdfe4;--gold:#b48a5a;--line:#e6dad3;--radius:18px;--shadow:0 10px 30px rgba(60,30,40,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.7 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}a{color:var(--accent)}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;line-height:1.15;margin:0 0 .5em}
+h1{font-size:clamp(2.1rem,5vw,3.2rem)}h2{font-size:1.7rem;margin-top:1.6em}
+.wrap{max-width:780px;margin:0 auto;padding:0 20px}.wide{max-width:1120px}
+.nav{position:sticky;top:0;z-index:20;background:rgba(251,247,244,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;max-width:1120px}
+.logo{font-family:"Cormorant Garamond",serif;font-size:1.35rem;font-weight:600;text-decoration:none;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 24px;border-radius:999px;font-weight:600;text-decoration:none;border:1.5px solid var(--accent);font-size:1rem}
+.btn-primary{background:var(--accent);color:#fff}.btn-ghost{color:var(--accent)}
+.nav .wrap{gap:12px}.nav .btn{padding:9px 16px;font-size:.9rem;white-space:nowrap;flex-shrink:0}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.crumbs{font-size:.85rem;color:var(--muted);margin:34px 0 14px}.crumbs a{color:var(--muted)}
+.eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:.75rem;font-weight:600;color:var(--gold);display:block;margin-bottom:10px}
+.date{color:var(--muted);font-size:.9rem;margin-bottom:24px}
+.photo{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin:10px 0 28px}
+.lead{font-size:1.2rem;color:var(--ink)}
+article p{color:#3d3036}
+.cta{background:var(--bg-alt);border:1px solid var(--line);border-radius:var(--radius);padding:28px;margin:44px 0 70px}
+.cta h3{font-size:1.5rem}
+.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));margin:30px 0 70px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);text-decoration:none;color:inherit;display:flex;flex-direction:column}
+.card img{aspect-ratio:4/3;object-fit:cover;width:100%}
+.card div{padding:20px}.card h3{font-size:1.3rem}.card p{color:var(--muted);font-size:.93rem;margin:0}
+.tag{display:inline-block;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:3px 10px;font-size:.75rem;font-weight:600;margin-bottom:10px}
+footer{padding:30px 0 50px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+`;
+
+function head(title: string, description: string, canonical: string, ogImage?: string, jsonLd?: object) {
+  return `<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(description)}">
+<link rel="canonical" href="${esc(canonical)}">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(description)}">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pl_PL">
+${ogImage ? `<meta property="og:image" content="${esc(ogImage)}">` : ""}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, "\\u003c")}</script>` : ""}
+<style>${CSS}</style>
+</head>
+<body>
+<nav class="nav"><div class="wrap"><a class="logo" href="../">Aleksandra Krajewska Studio</a><a class="btn btn-primary" href="${BOOKSY}" target="_blank" rel="noopener">Umów wizytę</a></div></nav>`;
+}
+
+const FOOT = `<footer><div class="wrap wide">© Aleksandra Krajewska Studio · ul. Michała Żaka 19/3U, 30-612 Kraków · <a href="tel:${PHONE}">533 292 100</a></div></footer>
+</body>
+</html>`;
+
+export function renderPostPage(post: Post, entry: PostEntry, siteUrl: string): string {
+  const url = `${siteUrl}/efekty/${entry.slug}.html`;
+  const img = `${siteUrl}/${entry.image}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.meta_description,
+    image: img,
+    datePublished: entry.date,
+    author: { "@type": "Person", name: "Aleksandra Krajewska" },
+    publisher: { "@type": "Organization", name: "Aleksandra Krajewska Studio" },
+    mainEntityOfPage: url,
+  };
+  const body = post.sections
+    .map((s) => `<h2>${esc(s.heading)}</h2>\n${s.paragraphs.map((p) => `<p>${esc(p)}</p>`).join("\n")}`)
+    .join("\n");
+  return `${head(`${post.title} | Aleksandra Krajewska Studio`, post.meta_description, url, img, jsonLd)}
+<main class="wrap">
+  <div class="crumbs"><a href="../">Strona główna</a> / <a href="./">Efekty</a></div>
+  <span class="eyebrow">Efekty · ${esc(entry.treatment)} · Kraków</span>
+  <h1>${esc(post.title)}</h1>
+  <div class="date">Opublikowano ${plDate(entry.date)}</div>
+  <div class="photo"><img src="img/${esc(entry.slug)}.jpg" alt="${esc(post.image_alt)}"></div>
+  <article>
+    <p class="lead">${esc(post.lead)}</p>
+    ${body}
+  </article>
+  <div class="cta">
+    <h3>Chcesz podobny efekt?</h3>
+    <p>Zacznij od bezpłatnej konsultacji online (15 min) – dobierzemy zabieg do Twojej skóry i oczekiwań.</p>
+    <div class="btns"><a class="btn btn-primary" href="${BOOKSY}" target="_blank" rel="noopener">Umów się w Booksy</a><a class="btn btn-ghost" href="tel:${PHONE}">Zadzwoń: 533 292 100</a></div>
+  </div>
+</main>
+${FOOT}`;
+}
+
+export function renderListPage(entries: PostEntry[], siteUrl: string): string {
+  const cards = entries
+    .map(
+      (e) => `<a class="card" href="${esc(e.slug)}.html"><img src="img/${esc(e.slug)}.jpg" alt="${esc(e.image_alt)}" loading="lazy"><div><span class="tag">${esc(e.treatment)}</span><h3>${esc(e.title)}</h3><p>${esc(e.lead)}</p></div></a>`,
+    )
+    .join("\n");
+  return `${head("Efekty zabiegów – medycyna estetyczna Kraków | Aleksandra Krajewska Studio", "Prawdziwe efekty zabiegów z gabinetu w Krakowie: modelowanie ust, Dermapen, stymulatory tkankowe, wampirzy lifting. Opisy prosto z gabinetu.", `${siteUrl}/efekty/`)}
+<main class="wrap wide">
+  <div class="crumbs"><a href="../">Strona główna</a> / Efekty</div>
+  <span class="eyebrow">Prosto z gabinetu</span>
+  <h1>Efekty zabiegów</h1>
+  <p class="lead">Wybrane zabiegi z mojego gabinetu w Krakowie – na czym polegały i dla kogo się sprawdzą.</p>
+  ${entries.length ? `<div class="grid">${cards}</div>` : `<p>Wkrótce pojawią się tu pierwsze wpisy.</p>`}
+</main>
+${FOOT}`;
+}
+
+export function renderSitemap(entries: PostEntry[], siteUrl: string): string {
+  const urls = [
+    `<url><loc>${siteUrl}/</loc></url>`,
+    `<url><loc>${siteUrl}/efekty/</loc></url>`,
+    ...entries.map((e) => `<url><loc>${siteUrl}/efekty/${e.slug}.html</loc><lastmod>${e.date}</lastmod></url>`),
+  ];
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`;
+}

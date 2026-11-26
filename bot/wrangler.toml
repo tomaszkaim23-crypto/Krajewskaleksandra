@@ -1,0 +1,24 @@
+name = "gabinet-efekty-bot"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Magazyn na szkice wpisów. Po `npx wrangler kv namespace create DRAFTS`
+# wklej tu zwrócone id.
+[[kv_namespaces]]
+binding = "DRAFTS"
+id = "WKLEJ_TUTAJ_ID_Z_KOMENDY"
+
+[vars]
+GITHUB_REPO = "tomaszkaim23-crypto/Krajewskaleksandra"
+GITHUB_BRANCH = "main"
+SITE_URL = "https://tomaszkaim23-crypto.github.io/Krajewskaleksandra"
+# Identyfikatory czatów Telegrama, które mogą publikować (po przecinku).
+# Bot poda Ci identyfikator, gdy napiszesz do niego pierwszy raz.
+ALLOWED_CHAT_IDS = ""
+
+# Sekrety ustawiasz komendami (nie wpisuj ich tutaj!):
+#   npx wrangler secret put TELEGRAM_BOT_TOKEN
+#   npx wrangler secret put TELEGRAM_WEBHOOK_SECRET
+#   npx wrangler secret put ANTHROPIC_API_KEY
+#   npx wrangler secret put GITHUB_TOKEN

@@ -132,6 +132,11 @@ section{padding:80px 0}
 @media (max-width:860px){.about .wrap{grid-template-columns:1fr;gap:30px}}
 
 /* REVIEWS */
+#efektyGrid{grid-template-columns:repeat(auto-fill,minmax(260px,350px));justify-content:center}
+.efekt{padding:0;overflow:hidden;text-decoration:none;color:inherit}
+.efekt img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.efekt div{padding:20px 22px 24px}
+.efekt h4{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.3rem;margin:0 0 6px}
 .review{margin:0}
 .review p{color:var(--ink);font-size:.97rem}
 .stars{color:var(--gold);letter-spacing:2px;margin-bottom:8px}
@@ -182,6 +187,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
     <div class="nav-links">
       <a href="#zabiegi">Zabiegi i ceny</a>
       <a href="#quiz">Dobierz zabieg</a>
+      <a href="efekty/">Efekty</a>
       <a href="#o-mnie">O mnie</a>
       <a href="#opinie">Opinie</a>
       <a href="#kontakt">Kontakt</a>
@@ -289,6 +295,18 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
       <ul class="values"><li>Bezpieczeństwo</li><li>Naturalność</li><li>Estetyka na najwyższym poziomie</li></ul>
       <a class="btn btn-ghost js-insta" href="#" target="_blank" rel="noopener">Zobacz efekty na Instagramie →</a>
     </div>
+  </div>
+</section>
+
+<section id="efekty" hidden>
+  <div class="wrap center">
+    <span class="eyebrow">Prosto z gabinetu</span>
+    <h2>Najnowsze efekty</h2>
+    <p class="lead">Wybrane zabiegi z ostatnich tygodni – na czym polegały i dla kogo się sprawdzą.</p>
+  </div>
+  <div class="wrap">
+    <div class="grid" id="efektyGrid"></div>
+    <p class="center" style="margin-top:30px"><a class="btn btn-ghost" href="efekty/">Zobacz wszystkie efekty →</a></p>
   </div>
 </section>
 
@@ -495,6 +513,21 @@ function renderResult() {
   document.getElementById("again").onclick = () => { step = 0; answers = {}; render(); };
 }
 render();
+
+/* ---------- Najnowsze efekty (dodawane przez bota na Telegramie) ---------- */
+(async () => {
+  try {
+    const res = await fetch("efekty/posts.json", { cache: "no-cache" });
+    if (!res.ok) return;
+    const posts = await res.json();
+    if (!Array.isArray(posts) || !posts.length) return;
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    document.getElementById("efektyGrid").innerHTML = posts.slice(0, 3).map(p =>
+      `<a class="card efekt" href="efekty/${esc(p.slug)}.html"><img src="${esc(p.image)}" alt="${esc(p.image_alt)}" loading="lazy"><div><span class="tag">${esc(p.treatment)}</span><h4>${esc(p.title)}</h4><p>${esc(p.lead)}</p></div></a>`
+    ).join("");
+    document.getElementById("efekty").hidden = false;
+  } catch (e) { /* brak wpisów lub podgląd offline – sekcja zostaje ukryta */ }
+})();
 </script>
 </body>
 </html>
