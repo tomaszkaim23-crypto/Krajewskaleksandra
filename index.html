@@ -523,7 +523,7 @@ render();
     if (!Array.isArray(posts) || !posts.length) return;
     const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     document.getElementById("efektyGrid").innerHTML = posts.slice(0, 3).map(p =>
-      `<a class="card efekt" href="efekty/${esc(p.slug)}.html"><img src="${esc(p.image)}" alt="${esc(p.image_alt)}" loading="lazy"><div><span class="tag">${esc(p.treatment)}</span><h4>${esc(p.title)}</h4><p>${esc(p.lead)}</p></div></a>`
+      `<a class="card efekt" href="efekty/${esc(p.slug)}"><img src="${esc(p.image)}" alt="${esc(p.image_alt)}" loading="lazy"><div><span class="tag">${esc(p.treatment)}</span><h4>${esc(p.title)}</h4><p>${esc(p.lead)}</p></div></a>`
     ).join("");
     document.getElementById("efekty").hidden = false;
   } catch (e) { /* brak wpisów lub podgląd offline – sekcja zostaje ukryta */ }

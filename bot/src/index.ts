@@ -145,7 +145,7 @@ async function publish(env: Env, chatId: number, draft: Draft) {
   ]);
 
   await env.DRAFTS.delete(draftKey(chatId));
-  const url = `${site}/efekty/${slug}.html`;
+  const url = `${site}/efekty/${slug}`;
   await send(env, chatId, `✅ Gotowe! Wpis pojawi się na stronie za ok. 1–2 minuty:\n${url}\n\n👇 Poniżej gotowy post do <b>wizytówki Google</b>. Skopiuj go, wejdź w wizytówkę → „Dodaj aktualność”, wklej tekst, dodaj to samo zdjęcie i przycisk „Dowiedz się więcej” z linkiem powyżej.`);
   await tg(env, "sendMessage", { chat_id: chatId, text: post.gbp_post });
 }

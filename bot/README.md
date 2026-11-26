@@ -103,7 +103,7 @@ Powinno się pokazać `"ok":true`.
 Usunięcie wpisu: na GitHubie usuń plik `efekty/<nazwa>.html` i jego wpis w `efekty/posts.json`. Możesz też poprosić Claude'a, żeby zrobił to za Ciebie.
 
 ## Google Search Console (darmowe statystyki z Google)
-1. Wejdź na https://search.google.com/search-console → *Dodaj usługę* → **Prefiks URL** → `https://tomaszkaim23-crypto.github.io/Krajewskaleksandra/`.
+1. Wejdź na https://search.google.com/search-console → *Dodaj usługę* → **Prefiks URL** → `https://krajewskastudio.krajewskastudio.workers.dev/`.
 2. Metoda weryfikacji: **Tag HTML**. Skopiuj kod z `content="..."` i dodaj tag do `<head>` w `index.html` (albo poproś o to Claude'a).
 3. Po weryfikacji: *Mapy witryn* → wpisz `sitemap.xml` → *Prześlij*. Bot aktualizuje tę mapę przy każdym wpisie.
 

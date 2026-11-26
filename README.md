@@ -6,24 +6,16 @@
 - `img/`: zdjęcia (oryginały, używane m.in. jako podgląd przy udostępnianiu linku)
 - `js/qrcode.js`: biblioteka do kodów QR (licencja MIT, nie ruszać)
 
-## Publikacja na GitHub Pages (za darmo)
-1. Wejdź na https://github.com/tomaszkaim23-crypto/Krajewskaleksandra i zaloguj się.
-2. Kliknij **Settings** (zakładka u góry repozytorium; na telefonie przewiń menu zakładek w prawo albo włącz w przeglądarce „Wersję na komputer”).
-3. W menu po lewej wybierz **Pages**.
-4. W sekcji „Build and deployment”:
-   - **Source:** *Deploy from a branch*
-   - **Branch:** wybierz `main`, a obok folder **`/ (root)`**
-   - kliknij **Save**.
-5. Poczekaj 1–3 minuty i odśwież stronę ustawień. U góry pojawi się „Your site is live at…”.
+## Publikacja (Cloudflare)
+Strona działa na Cloudflare jako Worker ze stroną statyczną (projekt `krajewskastudio`) połączony z tym repozytorium. Każda zmiana na gałęzi `main` (także wpis opublikowany przez bota) automatycznie aktualizuje stronę po około minucie.
 
-Adresy:
-- Strona: https://tomaszkaim23-crypto.github.io/Krajewskaleksandra/
-- Karty z QR: https://tomaszkaim23-crypto.github.io/Krajewskaleksandra/karta-opinii.html
+- Strona: https://krajewskastudio.krajewskastudio.workers.dev/
+- Karty z QR: https://krajewskastudio.krajewskastudio.workers.dev/karta-opinii
 
-Każda nowa zmiana wypchnięta na gałąź `main` automatycznie aktualizuje stronę po około minucie.
+Konfiguracja: `wrangler.jsonc`. Lista plików, które nie trafiają na stronę (kod bota, README): `.assetsignore`.
 
 ## Własna domena (później)
-Kup domenę (np. `krajewskastudio.pl`, ok. 50 zł/rok, np. w OVH lub home.pl). Potem w **Settings → Pages → Custom domain** wpisz jej nazwę i ustaw rekordy DNS według instrukcji GitHuba.
+Kup domenę (np. `krajewskastudio.pl`) u polskiego rejestratora (OVH, nazwa.pl, home.pl). Potem w Cloudflare: **Workers & Pages → krajewskastudio → Settings → Domains & Routes → Add → Custom domain**. Po podłączeniu domeny zmień adres w `bot/wrangler.toml` (`SITE_URL`), `sitemap.xml` i `robots.txt`.
 
 ## Bot „Efekty” na Telegramie
 Folder `bot/` zawiera bota, przez którego Ola publikuje wpisy w sekcji **Efekty** prosto z telefonu (zdjęcie + krótki opis → tekst pisany przez AI → zatwierdzenie → publikacja). Instrukcja uruchomienia: [`bot/README.md`](bot/README.md).

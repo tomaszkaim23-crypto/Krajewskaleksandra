@@ -7,12 +7,12 @@ compatibility_flags = ["nodejs_compat"]
 # wklej tu zwrócone id.
 [[kv_namespaces]]
 binding = "DRAFTS"
-id = "WKLEJ_TUTAJ_ID_Z_KOMENDY"
+id = "ea4acbfc165149d98124a9e36532a417"
 
 [vars]
 GITHUB_REPO = "tomaszkaim23-crypto/Krajewskaleksandra"
 GITHUB_BRANCH = "main"
-SITE_URL = "https://tomaszkaim23-crypto.github.io/Krajewskaleksandra"
+SITE_URL = "https://krajewskastudio.krajewskastudio.workers.dev"
 # Identyfikatory czatów Telegrama, które mogą publikować (po przecinku).
 # Bot poda Ci identyfikator, gdy napiszesz do niego pierwszy raz.
 ALLOWED_CHAT_IDS = ""

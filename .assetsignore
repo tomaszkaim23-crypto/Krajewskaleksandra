@@ -1,0 +1,9 @@
+# Pliki, które NIE trafiają na stronę
+bot/
+README.md
+wrangler.jsonc
+.gitignore
+.assetsignore
+.nojekyll
+.wrangler/
+node_modules/

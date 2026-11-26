@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /karta-opinii.html
+Disallow: /karta-opinii
 
-Sitemap: https://tomaszkaim23-crypto.github.io/Krajewskaleksandra/sitemap.xml
+Sitemap: https://krajewskastudio.krajewskastudio.workers.dev/sitemap.xml

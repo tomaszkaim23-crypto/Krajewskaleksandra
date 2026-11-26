@@ -94,7 +94,7 @@ const FOOT = `<footer><div class="wrap wide">© Aleksandra Krajewska Studio · u
 </html>`;
 
 export function renderPostPage(post: Post, entry: PostEntry, siteUrl: string): string {
-  const url = `${siteUrl}/efekty/${entry.slug}.html`;
+  const url = `${siteUrl}/efekty/${entry.slug}`;
   const img = `${siteUrl}/${entry.image}`;
   const jsonLd = {
     "@context": "https://schema.org",
@@ -133,7 +133,7 @@ ${FOOT}`;
 export function renderListPage(entries: PostEntry[], siteUrl: string): string {
   const cards = entries
     .map(
-      (e) => `<a class="card" href="${esc(e.slug)}.html"><img src="img/${esc(e.slug)}.jpg" alt="${esc(e.image_alt)}" loading="lazy"><div><span class="tag">${esc(e.treatment)}</span><h3>${esc(e.title)}</h3><p>${esc(e.lead)}</p></div></a>`,
+      (e) => `<a class="card" href="${esc(e.slug)}"><img src="img/${esc(e.slug)}.jpg" alt="${esc(e.image_alt)}" loading="lazy"><div><span class="tag">${esc(e.treatment)}</span><h3>${esc(e.title)}</h3><p>${esc(e.lead)}</p></div></a>`,
     )
     .join("\n");
   return `${head("Efekty zabiegów – medycyna estetyczna Kraków | Aleksandra Krajewska Studio", "Prawdziwe efekty zabiegów z gabinetu w Krakowie: modelowanie ust, Dermapen, stymulatory tkankowe, wampirzy lifting. Opisy prosto z gabinetu.", `${siteUrl}/efekty/`)}
@@ -151,7 +151,7 @@ export function renderSitemap(entries: PostEntry[], siteUrl: string): string {
   const urls = [
     `<url><loc>${siteUrl}/</loc></url>`,
     `<url><loc>${siteUrl}/efekty/</loc></url>`,
-    ...entries.map((e) => `<url><loc>${siteUrl}/efekty/${e.slug}.html</loc><lastmod>${e.date}</lastmod></url>`),
+    ...entries.map((e) => `<url><loc>${siteUrl}/efekty/${e.slug}</loc><lastmod>${e.date}</lastmod></url>`),
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`;
 }
