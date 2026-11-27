@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aleksandra Krajewska Studio – medycyna estetyczna i kosmetologia Kraków</title>
-<meta name="description" content="Medycyna estetyczna i kosmetologia w Krakowie, ul. Michała Żaka 19. Modelowanie ust, Dermapen, stymulatory tkankowe, wampirzy lifting (osocze, fibryna). Ratowniczka medyczna i mgr kosmetologii (CM UJ). Bezpłatna konsultacja online.">
+<meta name="description" content="Medycyna estetyczna i kosmetologia w Krakowie, ul. Michała Żaka 19. Modelowanie ust, Dermapen, lipoliza iniekcyjna, stymulatory tkankowe, wampirzy lifting (osocze, fibryna). Ratowniczka medyczna i mgr kosmetologii (CM UJ). Bezpłatna konsultacja online.">
 <meta property="og:title" content="Aleksandra Krajewska Studio – medycyna estetyczna Kraków">
 <meta property="og:description" content="Naturalne efekty, bez przerysowania. Sprawdź w 30 sekund, jaki zabieg jest dla Ciebie.">
 <meta property="og:type" content="website">
@@ -264,6 +264,14 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
       </div>
     </div>
 
+    <div class="cat">
+      <h3>Ciało i podbródek</h3>
+      <p>Miejscowe redukowanie opornej tkanki tłuszczowej, której nie da się pozbyć dietą i ćwiczeniami.</p>
+      <div class="grid">
+        <article class="card"><h4>Lipoliza iniekcyjna</h4><p>Preparat rozpuszczający komórki tłuszczowe w wybranym miejscu: podbródek, boczki, brzuch, uda, ramiona. Liczbę ampułek dobieramy do okolicy.</p><a class="more" href="lipoliza-iniekcyjna-krakow">Więcej o zabiegu →</a><div class="meta"><span class="price">350 zł</span><span class="dur">1 ampułka</span></div></article>
+      </div>
+    </div>
+
     <p class="center" style="margin-top:40px"><a class="btn btn-primary js-booksy" href="#" target="_blank" rel="noopener">Zobacz wolne terminy w Booksy</a></p>
   </div>
 </section>
@@ -437,6 +445,7 @@ const QUESTIONS = [
     ["firm",     "Jędrność i napięcie skóry, pierwsze oznaki starzenia"],
     ["eyes",     "Cienie i zmęczone spojrzenie"],
     ["wrinkles", "Zmarszczki mimiczne – czoło, lwia zmarszczka, kurze łapki"],
+    ["fat",      "Miejscowy tłuszczyk – podbródek, boczki, brzuch"],
     ["unsure",   "Nie wiem – chcę po prostu wyglądać świeżej"] ]},
   { q: "Ile masz lat?", key: "age", opts: [
     ["u30", "Poniżej 30"], ["30", "30–39"], ["40", "40–49"], ["50", "50+"] ]},
@@ -462,6 +471,8 @@ function recommend(a) {
         : { title: "Wampirzy lifting – osocze bogatopłytkowe", price: "749 zł · 40 min", why: "naturalnie pobudza regenerację skóry z użyciem Twojej własnej krwi – świetna profilaktyka." };
     case "eyes":
       return { title: "Fibryna bogatopłytkowa", price: "749 zł · 40 min", why: "rozjaśnia cienie i wzmacnia delikatną skórę pod oczami – w 100% naturalnie." };
+    case "fat":
+      return { title: "Lipoliza iniekcyjna", price: "350 zł / ampułka", why: "rozpuszcza komórki tłuszczowe w wybranym miejscu, np. pod brodą czy na boczkach – to sposób na oporne zgrubienia, a nie na odchudzanie. Liczbę ampułek dobierzemy na konsultacji." };
     case "wrinkles":
       return { title: "Konsultacja z Beauty Planem", price: "250 zł · 45 min", why: "przy zmarszczkach mimicznych najważniejszy jest dobór metody do Twojej anatomii i mimiki – na konsultacji ułożymy plan krok po kroku." };
     default:

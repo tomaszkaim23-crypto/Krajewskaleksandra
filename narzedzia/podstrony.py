@@ -251,6 +251,64 @@ PAGES = [
             ("Osocze czy fibryna – co wybrać?", "Przy cieniach pod oczami częściej polecam fibrynę, przy ogólnej rewitalizacji – osocze, a dla najpełniejszego efektu – Plasma Complex. Najlepszą opcję dobierzemy na konsultacji."),
         ],
     },
+    {
+        "slug": "lipoliza-iniekcyjna-krakow",
+        "nav": "Lipoliza iniekcyjna",
+        "title": "Lipoliza iniekcyjna Kraków – podbródek, boczki, brzuch | Aleksandra Krajewska Studio",
+        "description": "Lipoliza iniekcyjna w Krakowie: miejscowa redukcja tkanki tłuszczowej – podbródek, boczki, brzuch, uda, ramiona. 350 zł za ampułkę. ul. Michała Żaka 19.",
+        "h1": "Lipoliza iniekcyjna w Krakowie",
+        "lead": "Sposób na miejscowe zgrubienia tłuszczowe, które nie znikają mimo diety i ćwiczeń – np. podwójny podbródek, boczki czy „oponka”. Preparat podany w wybrane miejsce rozpuszcza komórki tłuszczowe, a organizm stopniowo je usuwa.",
+        "keywords": ["lipoliz", "podbród", "tłuszcz"],
+        "sections": [
+            ("Dla kogo jest lipoliza iniekcyjna?", [
+                ("ul", [
+                    "masz miejscowe, oporne zgrubienia tłuszczowe przy prawidłowej lub zbliżonej do prawidłowej wadze,",
+                    "przeszkadza Ci podwójny podbródek i chcesz wyraźniejszej linii żuchwy,",
+                    "dieta i ćwiczenia nie działają na boczki, brzuch, wewnętrzną stronę ud, ramiona czy okolice kolan,",
+                    "chcesz poprawić proporcje sylwetki bez zabiegu chirurgicznego.",
+                ]),
+                ("p", "Lipoliza <b>nie jest metodą odchudzania</b> – nie zastąpi diety ani ruchu i nie jest przeznaczona do redukcji dużej ilości tkanki tłuszczowej. Działa najlepiej na niewielkie, wyraźnie odgraniczone miejsca."),
+            ]),
+            ("Jak to działa?", [
+                ("p", "Preparat lipolityczny podaję cienką igłą bezpośrednio w tkankę tłuszczową. Uszkadza on błony komórek tłuszczowych, a ich zawartość jest stopniowo usuwana przez organizm. Ponieważ dorosły człowiek nie wytwarza nowych komórek tłuszczowych, przy stabilnej wadze efekt jest trwały."),
+            ]),
+            ("Ile ampułek i ile zabiegów?", [
+                ("p", "Liczba ampułek zależy od wielkości i rodzaju okolicy – inna będzie dla podbródka, a inna dla brzucha. Dokładną ilość ustalamy na konsultacji, po ocenie grubości tkanki tłuszczowej."),
+                ("p", "Najczęściej potrzebna jest seria kilku zabiegów w odstępach kilku tygodni. Plan dobieramy indywidualnie."),
+            ]),
+            ("Jak wygląda zabieg?", [
+                ("ol", [
+                    "konsultacja, wywiad medyczny i ocena okolicy,",
+                    "zaznaczenie miejsc podania i dezynfekcja,",
+                    "podanie preparatu cienką igłą,",
+                    "zalecenia po zabiegu.",
+                ]),
+            ]),
+            ("Po zabiegu", [
+                ("ul", [
+                    "obrzęk, zaczerwienienie, tkliwość i uczucie pieczenia w miejscu podania są normalne – świadczą o działaniu preparatu. Obrzęk może utrzymywać się kilka dni,",
+                    "mogą pojawić się siniaki,",
+                    "przez 2–3 dni unikaj sauny, solarium, intensywnych treningów i alkoholu,",
+                    "pij dużo wody i nie masuj intensywnie okolicy zabiegowej, chyba że zalecę inaczej.",
+                ]),
+                ("p", "Pierwsze efekty zwykle widać po kilku tygodniach, gdy organizm usunie rozpuszczony tłuszcz."),
+            ]),
+            ("Przeciwwskazania", [
+                ("p", "M.in. ciąża i karmienie piersią, choroby wątroby i nerek, zaburzenia krzepnięcia i leki przeciwkrzepliwe, niewyrównana cukrzyca, aktywne infekcje i stany zapalne skóry w okolicy zabiegu, choroby nowotworowe, choroby autoimmunologiczne oraz uczulenie na składniki preparatu. Zabieg nie jest przeznaczony do leczenia otyłości. Wszystko omawiamy na konsultacji."),
+            ]),
+        ],
+        "prices": [
+            ("Lipoliza iniekcyjna", "350 zł", "1 ampułka"),
+            ("Bezpłatna konsultacja online", "0 zł", "15 min"),
+        ],
+        "faq": [
+            ("Czy efekt lipolizy jest trwały?", "Rozpuszczone komórki tłuszczowe nie odbudowują się, dlatego przy utrzymaniu stabilnej wagi efekt jest długotrwały. Przy dużym przytyciu pozostałe komórki mogą się jednak powiększyć."),
+            ("Ile ampułek potrzebuję?", "To zależy od okolicy i grubości tkanki tłuszczowej. Dokładną liczbę ustalamy na konsultacji, zanim cokolwiek zaplanujemy – bez niespodzianek w cenie."),
+            ("Czy lipoliza boli?", "Podanie preparatu odczuwa się jako ukłucia, a później jako pieczenie i tkliwość przez pewien czas. Większość osób dobrze to znosi."),
+            ("Kiedy widać efekty?", "Zwykle po kilku tygodniach od zabiegu – organizm potrzebuje czasu, żeby usunąć rozpuszczony tłuszcz. Najlepsze efekty daje seria zabiegów."),
+            ("Czy mogę od razu wrócić do pracy?", "Zazwyczaj tak. Pamiętaj jednak, że przez kilka dni okolica może być opuchnięta – szczególnie po zabiegu na podbródek warto to uwzględnić w planach."),
+        ],
+    },
 ]
 
 E = html.escape

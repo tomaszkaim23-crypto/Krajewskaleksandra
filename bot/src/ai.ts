@@ -32,6 +32,7 @@ Cennik (nazwy zabiegów do pola treatment):
 - Osocze bogatopłytkowe (wampirzy lifting) – 749 zł
 - Fibryna bogatopłytkowa – 749 zł
 - Plasma Complex – fibryna + osocze – 899 zł
+- Lipoliza iniekcyjna – 350 zł za ampułkę
 
 Dostajesz zdjęcie z gabinetu i krótki opis od Oli (często podyktowany głosem, z literówkami). Na tej podstawie napisz wpis.
 
