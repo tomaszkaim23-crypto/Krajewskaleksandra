@@ -7,3 +7,4 @@ wrangler.jsonc
 .nojekyll
 .wrangler/
 node_modules/
+narzedzia/

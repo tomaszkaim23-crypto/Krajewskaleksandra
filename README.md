@@ -19,3 +19,6 @@ Kup domenę (np. `krajewskastudio.pl`) u polskiego rejestratora (OVH, nazwa.pl, 
 
 ## Bot „Efekty” na Telegramie
 Folder `bot/` zawiera bota, przez którego Ola publikuje wpisy w sekcji **Efekty** prosto z telefonu (zdjęcie + krótki opis → tekst pisany przez AI → zatwierdzenie → publikacja). Instrukcja uruchomienia: [`bot/README.md`](bot/README.md).
+
+## Podstrony zabiegów
+Strony `modelowanie-ust-krakow`, `dermapen-krakow`, `stymulator-tkankowy-krakow` i `wampirzy-lifting-krakow` są generowane skryptem `narzedzia/podstrony.py`. Teksty i ceny zmieniasz w tym skrypcie, a potem uruchamiasz `python3 narzedzia/podstrony.py` (albo prosisz o to Claude'a). Skrypt aktualizuje też `sitemap-strony.xml`. Mapę z wpisami (`sitemap.xml`) aktualizuje bot.

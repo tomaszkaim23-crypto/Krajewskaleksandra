@@ -3,3 +3,4 @@ Allow: /
 Disallow: /karta-opinii
 
 Sitemap: https://krajewskastudio.pl/sitemap.xml
+Sitemap: https://krajewskastudio.pl/sitemap-strony.xml
