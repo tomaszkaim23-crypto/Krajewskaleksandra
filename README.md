@@ -15,7 +15,7 @@ Strona działa na Cloudflare jako Worker ze stroną statyczną (projekt `krajews
 Konfiguracja: `wrangler.jsonc`. Lista plików, które nie trafiają na stronę (kod bota, README): `.assetsignore`.
 
 ## Własna domena (później)
-Kup domenę (np. `krajewskastudio.pl`) u polskiego rejestratora (OVH, nazwa.pl, home.pl). Potem w Cloudflare: **Workers & Pages → krajewskastudio → Settings → Domains & Routes → Add → Custom domain**. Po podłączeniu domeny zmień adres w `bot/wrangler.toml` (`SITE_URL`), `sitemap.xml` i `robots.txt`.
+Kup domenę (np. `krajewskastudio.pl`) u polskiego rejestratora (OVH, nazwa.pl, home.pl). Domena jest podłączona w Cloudflare (Workers & Pages → krajewskastudio → Domains) i wpisana w `wrangler.jsonc` (sekcja `routes`), żeby automatyczne wdrożenia jej nie odłączały. Przy zmianie domeny popraw ją tam, w `bot/wrangler.jsonc` (`SITE_URL`), `sitemap.xml` i `robots.txt`.
 
 ## Bot „Efekty” na Telegramie
 Folder `bot/` zawiera bota, przez którego Ola publikuje wpisy w sekcji **Efekty** prosto z telefonu (zdjęcie + krótki opis → tekst pisany przez AI → zatwierdzenie → publikacja). Instrukcja uruchomienia: [`bot/README.md`](bot/README.md).
