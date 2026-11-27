@@ -9,8 +9,8 @@
 ## Publikacja (Cloudflare)
 Strona działa na Cloudflare jako Worker ze stroną statyczną (projekt `krajewskastudio`) połączony z tym repozytorium. Każda zmiana na gałęzi `main` (także wpis opublikowany przez bota) automatycznie aktualizuje stronę po około minucie.
 
-- Strona: https://krajewskastudio.krajewskastudio.workers.dev/
-- Karty z QR: https://krajewskastudio.krajewskastudio.workers.dev/karta-opinii
+- Strona: https://krajewskastudio.pl/
+- Karty z QR: https://krajewskastudio.pl/karta-opinii
 
 Konfiguracja: `wrangler.jsonc`. Lista plików, które nie trafiają na stronę (kod bota, README): `.assetsignore`.
 

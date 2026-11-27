@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /karta-opinii
 
-Sitemap: https://krajewskastudio.krajewskastudio.workers.dev/sitemap.xml
+Sitemap: https://krajewskastudio.pl/sitemap.xml
