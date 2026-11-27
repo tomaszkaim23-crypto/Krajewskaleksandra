@@ -26,6 +26,8 @@ Bot działa na **Cloudflare Workers** (plan darmowy wystarczy). Szkice trzyma pr
 
 Do Anthropic wpłacasz z góry, np. 5 USD, i to wystarczy na bardzo wiele wpisów. W panelu można ustawić limit wydatków.
 
+> ⚠️ **Zawsze uruchamiaj komendy `npx wrangler …` i `npm run deploy` w folderze `bot`.** Konfiguracja bota jest w `bot/wrangler.jsonc`, a w folderze głównym leży osobna konfiguracja **strony** (`wrangler.jsonc`). Pomylenie folderów nadpisze stronę.
+
 ## Uruchomienie (jednorazowo, ok. 30–40 minut na komputerze)
 
 Potrzebujesz komputera z zainstalowanym **Node.js** (https://nodejs.org, wersja LTS).
@@ -58,7 +60,7 @@ npx wrangler login                          # otworzy przeglądarkę – zaloguj
 npx wrangler kv namespace create DRAFTS     # skopiuj zwrócone "id"
 ```
 
-4. Otwórz `wrangler.toml` i w miejsce `WKLEJ_TUTAJ_ID_Z_KOMENDY` wklej to `id`.
+4. Otwórz `wrangler.jsonc` i w `kv_namespaces` wpisz to `id` (obecnie jest tam już id magazynu utworzonego dla tego gabinetu).
 5. Ustaw sekrety. Każda komenda zapyta o wartość, którą wklejasz:
 
 ```bash
@@ -88,7 +90,7 @@ Powinno się pokazać `"ok":true`.
 ### 6. Pozwól Oli publikować
 1. Ola pisze do swojego bota w Telegramie cokolwiek, np. `/start`.
 2. Bot odpowie, że jest prywatny, i poda **identyfikator czatu** (liczbę).
-3. Wpisz go w `wrangler.toml` → `ALLOWED_CHAT_IDS = "123456789"`. Kilka osób oddzielasz przecinkami.
+3. Wpisz go w `wrangler.jsonc` → `"ALLOWED_CHAT_IDS": "123456789"`. Kilka osób oddzielasz przecinkami.
 4. Ponownie `npm run deploy`.
 5. Ola pisze `/start`, a bot pokaże instrukcję. Gotowe! 🎉
 
@@ -107,10 +109,47 @@ Usunięcie wpisu: na GitHubie usuń plik `efekty/<nazwa>.html` i jego wpis w `ef
 2. Metoda weryfikacji: **Tag HTML**. Skopiuj kod z `content="..."` i dodaj tag do `<head>` w `index.html` (albo poproś o to Claude'a).
 3. Po weryfikacji: *Mapy witryn* → wpisz `sitemap.xml` → *Prześlij*. Bot aktualizuje tę mapę przy każdym wpisie.
 
-Gdy pojawi się własna domena, dodaj w Search Console usługę typu **Domena** (weryfikacja rekordem DNS) i zmień `SITE_URL` w `wrangler.toml`.
+Gdy pojawi się własna domena, dodaj w Search Console usługę typu **Domena** (weryfikacja rekordem DNS) i zmień `SITE_URL` w `wrangler.jsonc`.
+
+## Publikowanie w wizytówce Google (opcjonalnie)
+
+Gdy to skonfigurujesz, po każdej publikacji na stronie bot zapyta: **„📍 Opublikować ten wpis także w wizytówce Google?”**. Po kliknięciu „Tak” doda post (aktualność) ze zdjęciem i przyciskiem „Dowiedz się więcej” prowadzącym do wpisu. Bez tej konfiguracji bot przysyła gotowy tekst do ręcznego wklejenia.
+
+### Etap 1: wniosek o dostęp do API (Google rozpatruje go od kilku dni do kilku tygodni)
+1. Wejdź na https://console.cloud.google.com i zaloguj się **kontem Google, na którym jest wizytówka**.
+2. U góry: lista projektów → **Nowy projekt** → nazwa np. `krajewskastudio-bot` → **Utwórz**.
+3. Skopiuj **numer projektu** (*Project number*) ze strony głównej projektu (Dashboard / „Informacje o projekcie”).
+4. Otwórz formularz wniosku o dostęp do Google Business Profile API. Link znajdziesz w dokumentacji Google Business Profile APIs, w części o rozpoczęciu pracy z API, pod hasłem *„Request access to the APIs”*. Wybierz w nim opcję **Application for Basic API Access** i wypełnij:
+   - adres e-mail i numer projektu z punktu 3,
+   - nazwa firmy: *Aleksandra Krajewska Studio*, strona: `https://krajewskastudio.pl`,
+   - opis zastosowania, np.: *„Właścicielka gabinetu zarządza wyłącznie własną, zweryfikowaną wizytówką. Wewnętrzne narzędzie publikuje posty (aktualności) ze zdjęciami zabiegów z naszego gabinetu w Krakowie, po ręcznym zatwierdzeniu każdego posta przez właścicielkę.”*
+5. Czekaj na maila od Google. Po akceptacji w projekcie pojawi się limit zapytań większy niż 0 (*APIs & Services → Quotas*).
+
+### Etap 2: po akceptacji (ok. 20–30 minut)
+1. **Włącz API.** W projekcie: *APIs & Services → Library*. Wyszukaj i włącz (**Enable**) trzy pozycje: **My Business Account Management API**, **My Business Business Information API** i **Google My Business API**.
+2. **Ekran zgody OAuth.** *APIs & Services → OAuth consent screen* (lub *Google Auth Platform*):
+   - typ użytkownika **External**, nazwa aplikacji np. `Bot Efekty`, Twój e-mail jako kontakt,
+   - w **Audience / Test users** dodaj e-mail konta z wizytówką,
+   - **Publishing status: In production** (kliknij *Publish app*). W trybie „Testing” Google co 7 dni unieważnia logowanie i bot przestałby publikować. Ostrzeżenie o niezweryfikowanej aplikacji jest normalne, bo korzystasz z niej tylko Ty.
+3. **Dane logowania.** *APIs & Services → Credentials → Create credentials → OAuth client ID*:
+   - typ **Web application**,
+   - *Authorized redirect URIs*: dodaj `https://developers.google.com/oauthplayground`,
+   - skopiuj **Client ID** i **Client secret**.
+4. **Token odświeżania (refresh token).** Wejdź na https://developers.google.com/oauthplayground:
+   - ⚙️ (prawy górny róg) → zaznacz **Use your own OAuth credentials** → wklej Client ID i Client secret,
+   - w polu po lewej („Input your own scopes”) wpisz `https://www.googleapis.com/auth/business.manage` → **Authorize APIs**,
+   - zaloguj się kontem z wizytówką i zezwól na dostęp (przy ostrzeżeniu wybierz *Zaawansowane → Przejdź do…*),
+   - **Exchange authorization code for tokens** → skopiuj **Refresh token**.
+5. **Zapisz sekrety w bocie** (w folderze `bot`):
+   ```bash
+   npx wrangler secret put GBP_CLIENT_ID
+   npx wrangler secret put GBP_CLIENT_SECRET
+   npx wrangler secret put GBP_REFRESH_TOKEN
+   ```
+6. **Odczytaj numery wizytówki.** Napisz do bota `/google`. Odpowie numerami `GBP_ACCOUNT_ID` i `GBP_LOCATION_ID`. Wpisz je w `wrangler.jsonc` (sekcja `vars`) i wpisz `npm run deploy`.
+7. Gotowe. Po następnej publikacji bot zapyta o wysłanie posta do Google. Komenda `/google` potwierdzi też, czy wszystko jest włączone.
 
 ## Plany na później
-- **Automatyczne posty w wizytówce Google.** Wymaga zgłoszenia i akceptacji dostępu do Google Business Profile API przez Google. Do tego czasu bot przygotowuje gotowy tekst do wklejenia.
 - **Wiadomości głosowe.** Teraz trzeba dyktować mikrofonem na klawiaturze. Obsługa nagrań głosowych wymagałaby dodatkowej usługi zamiany mowy na tekst.
 
 ## Sprawdzanie i podgląd logów

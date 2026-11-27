@@ -1,0 +1,33 @@
+// Konfiguracja BOTA (osobny Worker niż strona). Wdrażaj z folderu bot/: npm run deploy
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "gabinet-efekty-bot",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Magazyn na szkice wpisów
+  "kv_namespaces": [{ "binding": "DRAFTS", "id": "ea4acbfc165149d98124a9e36532a417" }],
+
+  "vars": {
+    "GITHUB_REPO": "tomaszkaim23-crypto/Krajewskaleksandra",
+    "GITHUB_BRANCH": "main",
+    "SITE_URL": "https://krajewskastudio.pl",
+    // Identyfikatory czatów Telegrama, które mogą publikować (po przecinku).
+    // Bot poda identyfikator, gdy napiszesz do niego pierwszy raz.
+    "ALLOWED_CHAT_IDS": "",
+    // Wizytówka Google – uzupełnij po akceptacji dostępu do API (liczby poda komenda /google w bocie).
+    "GBP_ACCOUNT_ID": "",
+    "GBP_LOCATION_ID": ""
+  }
+
+  // Sekrety ustawiasz komendami w folderze bot/ (nie wpisuj ich tutaj!):
+  //   npx wrangler secret put TELEGRAM_BOT_TOKEN
+  //   npx wrangler secret put TELEGRAM_WEBHOOK_SECRET
+  //   npx wrangler secret put ANTHROPIC_API_KEY
+  //   npx wrangler secret put GITHUB_TOKEN
+  // Opcjonalnie, dla wizytówki Google (po akceptacji API):
+  //   npx wrangler secret put GBP_CLIENT_ID
+  //   npx wrangler secret put GBP_CLIENT_SECRET
+  //   npx wrangler secret put GBP_REFRESH_TOKEN
+}

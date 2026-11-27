@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { generatePost, type Post } from "./ai";
 import { commitFiles, readTextFile, type GitHubConfig } from "./github";
+import { createPost, listLocations, type GbpConfig, type GbpPost } from "./gbp";
 import { esc, renderListPage, renderPostPage, renderSitemap, slugify, type PostEntry } from "./render";
 
 export interface Env {
@@ -13,7 +14,27 @@ export interface Env {
   GITHUB_REPO: string;
   GITHUB_BRANCH: string;
   SITE_URL: string; // bez końcowego "/"
+  // Wizytówka Google (opcjonalnie – działa dopiero po akceptacji dostępu do API przez Google)
+  GBP_CLIENT_ID?: string;
+  GBP_CLIENT_SECRET?: string;
+  GBP_REFRESH_TOKEN?: string;
+  GBP_ACCOUNT_ID?: string;
+  GBP_LOCATION_ID?: string;
 }
+
+function gbpConfig(env: Env): GbpConfig | null {
+  if (!env.GBP_CLIENT_ID || !env.GBP_CLIENT_SECRET || !env.GBP_REFRESH_TOKEN) return null;
+  return {
+    clientId: env.GBP_CLIENT_ID,
+    clientSecret: env.GBP_CLIENT_SECRET,
+    refreshToken: env.GBP_REFRESH_TOKEN,
+    accountId: env.GBP_ACCOUNT_ID?.trim() || undefined,
+    locationId: env.GBP_LOCATION_ID?.trim() || undefined,
+  };
+}
+const gbpReady = (cfg: GbpConfig | null): cfg is GbpConfig => !!cfg?.accountId && !!cfg?.locationId;
+const gbpKey = (chatId: number) => `gbp:${chatId}`;
+const GBP_MANUAL = "👇 Gotowy post do <b>wizytówki Google</b>. Skopiuj go, wejdź w wizytówkę → „Dodaj aktualność”, wklej tekst, dodaj to samo zdjęcie i przycisk „Dowiedz się więcej” z linkiem do wpisu.";
 
 interface Draft {
   fileId: string;
@@ -146,8 +167,42 @@ async function publish(env: Env, chatId: number, draft: Draft) {
 
   await env.DRAFTS.delete(draftKey(chatId));
   const url = `${site}/efekty/${slug}`;
-  await send(env, chatId, `✅ Gotowe! Wpis pojawi się na stronie za ok. 1–2 minuty:\n${url}\n\n👇 Poniżej gotowy post do <b>wizytówki Google</b>. Skopiuj go, wejdź w wizytówkę → „Dodaj aktualność”, wklej tekst, dodaj to samo zdjęcie i przycisk „Dowiedz się więcej” z linkiem powyżej.`);
-  await tg(env, "sendMessage", { chat_id: chatId, text: post.gbp_post });
+  await send(env, chatId, `✅ Gotowe! Wpis pojawi się na stronie za ok. 1–2 minuty:\n${url}`);
+
+  if (gbpReady(gbpConfig(env))) {
+    // Zdjęcie z GitHuba jest dostępne od razu po commicie (strona buduje się jeszcze ok. minuty).
+    const gp: GbpPost = {
+      summary: post.gbp_post,
+      url,
+      imageUrl: `https://raw.githubusercontent.com/${env.GITHUB_REPO}/${env.GITHUB_BRANCH}/${entry.image}`,
+    };
+    await env.DRAFTS.put(gbpKey(chatId), JSON.stringify(gp), { expirationTtl: 60 * 60 * 24 * 3 });
+    await send(env, chatId, `📍 Opublikować ten wpis także w <b>wizytówce Google</b>?\n\n<i>${esc(post.gbp_post)}</i>`, {
+      reply_markup: { inline_keyboard: [[
+        { text: "📍 Tak, do Google", callback_data: "gbp" },
+        { text: "Nie teraz", callback_data: "gbp_no" },
+      ]] },
+    });
+  } else {
+    await send(env, chatId, GBP_MANUAL);
+    await tg(env, "sendMessage", { chat_id: chatId, text: post.gbp_post });
+  }
+}
+
+async function publishToGoogle(env: Env, chatId: number) {
+  const cfg = gbpConfig(env);
+  const raw = await env.DRAFTS.get(gbpKey(chatId));
+  if (!raw) return send(env, chatId, "Nie mam już tego posta – minęło za dużo czasu.");
+  const gp: GbpPost = JSON.parse(raw);
+  if (!gbpReady(cfg)) return send(env, chatId, "Publikacja w Google nie jest jeszcze skonfigurowana.");
+  try {
+    const link = await createPost(cfg, gp);
+    await env.DRAFTS.delete(gbpKey(chatId));
+    await send(env, chatId, `✅ Post jest w wizytówce Google!${link ? `\n${link}` : ""}\nMoże pojawić się z kilkuminutowym opóźnieniem.`);
+  } catch (e) {
+    await send(env, chatId, `😕 Google nie przyjął posta: ${esc(String(e)).slice(0, 500)}\n\n${GBP_MANUAL}`);
+    await tg(env, "sendMessage", { chat_id: chatId, text: gp.summary });
+  }
 }
 
 // ---------- Obsługa aktualizacji z Telegrama ----------
@@ -161,6 +216,11 @@ async function handleUpdate(env: Env, update: any) {
     await tg(env, "answerCallbackQuery", { callback_query_id: cq.id });
     if (!allowed.includes(String(chatId))) return;
     await tg(env, "editMessageReplyMarkup", { chat_id: chatId, message_id: cq.message.message_id, reply_markup: { inline_keyboard: [] } });
+    if (cq.data === "gbp") return publishToGoogle(env, chatId);
+    if (cq.data === "gbp_no") {
+      await env.DRAFTS.delete(gbpKey(chatId));
+      return send(env, chatId, "OK, tylko na stronie.");
+    }
     const draft = await getDraft(env, chatId);
     if (!draft?.post) return send(env, chatId, "Nie mam szkicu do tej akcji. Wyślij nowe zdjęcie.");
     if (cq.data === "pub") {
@@ -187,6 +247,18 @@ async function handleUpdate(env: Env, update: any) {
   }
 
   if (msg.text?.startsWith("/start") || msg.text?.startsWith("/pomoc")) return send(env, chatId, HELP);
+  if (msg.text?.startsWith("/google")) {
+    const cfg = gbpConfig(env);
+    if (!cfg) return send(env, chatId, "Brak danych logowania Google (GBP_CLIENT_ID, GBP_CLIENT_SECRET, GBP_REFRESH_TOKEN). Zobacz README bota.");
+    try {
+      const locs = await listLocations(cfg);
+      if (!locs.length) return send(env, chatId, "Zalogowano do Google, ale na tym koncie nie widzę żadnej wizytówki.");
+      const lines = locs.map((l) => `• <b>${esc(l.title)}</b>\n  GBP_ACCOUNT_ID = <code>${l.account}</code>\n  GBP_LOCATION_ID = <code>${l.location}</code>`);
+      return send(env, chatId, `Znalezione wizytówki:\n\n${lines.join("\n\n")}\n\nWpisz te liczby w wrangler.toml i zrób <code>npm run deploy</code>.${gbpReady(cfg) ? "\n\n✅ Publikacja w Google jest już włączona." : ""}`);
+    } catch (e) {
+      return send(env, chatId, `😕 ${esc(String(e)).slice(0, 600)}`);
+    }
+  }
   if (msg.text?.startsWith("/anuluj")) {
     await env.DRAFTS.delete(draftKey(chatId));
     return send(env, chatId, "Anulowane.");
