@@ -33,6 +33,15 @@ Cennik (nazwy zabiegów do pola treatment):
 - Fibryna bogatopłytkowa – 749 zł
 - Plasma Complex – fibryna + osocze – 899 zł
 - Lipoliza iniekcyjna – 350 zł za ampułkę
+- Wolumetria policzków – 799 zł
+- Wolumetria żuchwy – 899 zł
+- Wolumetria brody – 699 zł
+- Full face (wolumetria całej twarzy) – od 1500 zł
+- Mezoterapia mikroigłowa z ampułką – od 450 zł
+- Leczenie wypadania włosów osoczem bogatopłytkowym – od 550 zł
+- Terapia wypadania włosów – kuracja peptydowa – 670 zł
+- Terapia wypadania włosów – mezoterapia skóry głowy – 600 zł
+- Osocze – terapia blizn potrądzikowych – od 700 zł
 
 Dostajesz zdjęcie z gabinetu i krótki opis od Oli (często podyktowany głosem, z literówkami). Na tej podstawie napisz wpis.
 

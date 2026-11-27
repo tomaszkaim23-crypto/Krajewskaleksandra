@@ -6,6 +6,7 @@ Teksty i ceny zmieniasz w liście PAGES poniżej, potem uruchamiasz z folderu g�
 Skrypt nadpisze pliki <slug>.html w folderze głównym i plik sitemap-strony.xml.
 """
 import html
+import re
 import json
 from pathlib import Path
 
@@ -122,6 +123,7 @@ PAGES = [
         "prices": [
             ("Dermapen – mezoterapia mikroigłowa z ampułką", "699 zł", "45 min"),
             ("Dermapen + peeling chemiczny", "599 zł", "30 min"),
+            ("Mezoterapia mikroigłowa z ampułką", "od 450 zł", ""),
             ("Bezpłatna konsultacja online", "0 zł", "15 min"),
         ],
         "faq": [
@@ -209,6 +211,7 @@ PAGES = [
                 ("p", "<b>Osocze bogatopłytkowe</b> – płynne, świetnie sprawdza się przy ogólnej rewitalizacji twarzy, szyi i dekoltu."),
                 ("p", "<b>Fibryna bogatopłytkowa</b> – gęstsza, dłużej uwalnia czynniki wzrostu. Często wybierana przy cieniach i zmęczonej skórze pod oczami."),
                 ("p", "<b>Plasma Complex</b> – połączenie osocza i fibryny w jednym zabiegu, czyli najbardziej kompleksowa odbudowa skóry."),
+                ("p", "Osocze stosuję też jako <b>terapię blizn potrądzikowych</b> oraz w <a href=\"wypadanie-wlosow-krakow\">leczeniu wypadania włosów</a>."),
             ]),
             ("Jak wygląda zabieg?", [
                 ("ol", [
@@ -242,6 +245,7 @@ PAGES = [
             ("Osocze bogatopłytkowe", "749 zł", "40 min"),
             ("Fibryna bogatopłytkowa", "749 zł", "40 min"),
             ("Plasma Complex – fibryna + osocze", "899 zł", "40 min"),
+            ("Osocze – terapia blizn potrądzikowych", "od 700 zł", "40 min"),
             ("Bezpłatna konsultacja online", "0 zł", "15 min"),
         ],
         "faq": [
@@ -307,6 +311,123 @@ PAGES = [
             ("Czy lipoliza boli?", "Podanie preparatu odczuwa się jako ukłucia, a później jako pieczenie i tkliwość przez pewien czas. Większość osób dobrze to znosi."),
             ("Kiedy widać efekty?", "Zwykle po kilku tygodniach od zabiegu – organizm potrzebuje czasu, żeby usunąć rozpuszczony tłuszcz. Najlepsze efekty daje seria zabiegów."),
             ("Czy mogę od razu wrócić do pracy?", "Zazwyczaj tak. Pamiętaj jednak, że przez kilka dni okolica może być opuchnięta – szczególnie po zabiegu na podbródek warto to uwzględnić w planach."),
+        ],
+    },
+    {
+        "slug": "wolumetria-twarzy-krakow",
+        "nav": "Wolumetria twarzy",
+        "title": "Wolumetria twarzy Kraków – policzki, żuchwa, broda | Aleksandra Krajewska Studio",
+        "description": "Wolumetria twarzy w Krakowie: policzki, linia żuchwy, broda i full face. Naturalne przywrócenie objętości i konturu. Od 699 zł. ul. Michała Żaka 19.",
+        "h1": "Wolumetria twarzy w Krakowie",
+        "lead": "Z wiekiem twarz traci objętość: policzki się spłaszczają, owal traci ostrość, a twarz wygląda na zmęczoną. Wolumetria przywraca objętość tam, gdzie jej ubyło, i podkreśla kontur – bez zmiany rysów i z zachowaniem Twoich proporcji.",
+        "keywords": ["wolumetr", "policzk", "żuchw"],
+        "sections": [
+            ("Dla kogo jest wolumetria?", [
+                ("ul", [
+                    "policzki straciły objętość, a środkowa część twarzy „opadła”,",
+                    "linia żuchwy jest mało wyraźna i owal twarzy się zaciera,",
+                    "broda jest cofnięta lub mała w stosunku do reszty twarzy,",
+                    "twarz wygląda na zmęczoną, mimo że jesteś wypoczęta,",
+                    "chcesz delikatnie wyrównać asymetrie lub podkreślić rysy.",
+                ]),
+            ]),
+            ("Jakie okolice?", [
+                ("p", "<b>Policzki</b> – przywrócenie objętości środkowej części twarzy. Często daje efekt delikatnego „liftingu” i odświeżenia całej twarzy."),
+                ("p", "<b>Żuchwa</b> – wyraźniejsza linia żuchwy i bardziej zdefiniowany owal."),
+                ("p", "<b>Broda</b> – poprawa proporcji profilu i harmonii dolnej części twarzy."),
+                ("p", "<b>Full face</b> – kompleksowy plan dla całej twarzy. Najpierw analizuję proporcje i ustalam, które okolice wymagają wsparcia, dlatego cena zależy od ilości preparatu i zaczyna się od 1500 zł."),
+            ]),
+            ("Jak wygląda zabieg?", [
+                ("ol", [
+                    "<b>Analiza twarzy</b> – oceniam proporcje, anatomię i to, co realnie poprawi wygląd.",
+                    "<b>Znieczulenie</b> – krem znieczulający, a preparaty zwykle zawierają dodatkowo środek znieczulający.",
+                    "<b>Podanie preparatu</b> – igłą lub kaniulą, w małych porcjach, z bieżącą kontrolą symetrii.",
+                    "<b>Zalecenia</b> i kontakt do mnie w razie pytań.",
+                ]),
+            ]),
+            ("Po zabiegu", [
+                ("ul", [
+                    "obrzęk i tkliwość mogą utrzymywać się kilka dni, możliwe są siniaki,",
+                    "przez 48 godzin unikaj sauny, intensywnego wysiłku i alkoholu,",
+                    "nie masuj okolicy zabiegowej i przez pierwsze noce postaraj się spać na plecach,",
+                    "ostateczny efekt oceniamy po około 2 tygodniach.",
+                ]),
+            ]),
+            ("Przeciwwskazania", [
+                ("p", "M.in. ciąża i karmienie piersią, aktywne infekcje i stany zapalne skóry, opryszczka, aktywna faza chorób autoimmunologicznych, zaburzenia krzepnięcia i skłonność do bliznowców. Wszystko omawiamy na konsultacji."),
+            ]),
+        ],
+        "prices": [
+            ("Wolumetria policzków", "799 zł", ""),
+            ("Wolumetria żuchwy", "899 zł", ""),
+            ("Wolumetria brody", "699 zł", ""),
+            ("Full face", "od 1500 zł", "cena zmienna"),
+            ("Bezpłatna konsultacja online", "0 zł", "15 min"),
+        ],
+        "faq": [
+            ("Czy efekt będzie naturalny?", "Tak – pracuję z Twoimi proporcjami, a nie przeciwko nim. Celem jest wypoczęta, harmonijna twarz, a nie zmiana rysów."),
+            ("Jak długo utrzymuje się efekt?", "Zwykle od kilku miesięcy do ponad roku – zależy to od okolicy, rodzaju preparatu i organizmu."),
+            ("Czym jest full face?", "To plan obejmujący kilka okolic twarzy naraz, ustalany po analizie proporcji. Dzięki temu efekt jest spójny, a cena zależy od faktycznie zużytej ilości preparatu."),
+            ("Czy wolumetria boli?", "Stosuję znieczulenie, dlatego większość osób odczuwa jedynie niewielki dyskomfort."),
+            ("Czy można połączyć wolumetrię z innymi zabiegami?", "Tak, często łączę ją np. ze stymulatorem tkankowym lub zabiegami poprawiającymi jakość skóry. Kolejność i odstępy ustalimy na konsultacji."),
+        ],
+    },
+    {
+        "slug": "wypadanie-wlosow-krakow",
+        "nav": "Wypadanie włosów",
+        "title": "Leczenie wypadania włosów Kraków – osocze, kuracja peptydowa | Aleksandra Krajewska Studio",
+        "description": "Terapie wypadania włosów w Krakowie: osocze bogatopłytkowe, kuracja peptydowa i mezoterapia skóry głowy. Wzmocnienie cebulek i zagęszczenie włosów. Od 550 zł.",
+        "h1": "Terapia wypadania włosów w Krakowie",
+        "lead": "Nadmierne wypadanie, przerzedzenie albo cienkie, osłabione włosy to problem, z którym przychodzi do mnie coraz więcej osób. Zabiegi na skórę głowy wzmacniają cebulki, pobudzają porost i poprawiają kondycję włosów.",
+        "keywords": ["włos"],
+        "sections": [
+            ("Dla kogo są terapie wypadania włosów?", [
+                ("ul", [
+                    "nadmierne wypadanie włosów – np. sezonowe, po porodzie, po stresie lub chorobie,",
+                    "przerzedzenie włosów i prześwitująca skóra głowy,",
+                    "cienkie, osłabione włosy bez objętości,",
+                    "osoby, które chcą wesprzeć leczenie prowadzone przez lekarza.",
+                ]),
+                ("p", "Wypadanie włosów może mieć różne przyczyny – hormonalne, niedobory, choroby tarczycy. Przy nasilonym wypadaniu warto wykonać badania i skonsultować się z lekarzem. Zabiegi w gabinecie świetnie uzupełniają takie leczenie."),
+            ]),
+            ("Metody", [
+                ("p", "<b>Osocze bogatopłytkowe</b> – z Twojej własnej krwi pozyskuję osocze bogate w czynniki wzrostu i podaję je w skórę głowy. Pobudza to cebulki do pracy i wspiera porost włosów. Pobranie krwi wykonuję sama – jestem ratowniczką medyczną."),
+                ("p", "<b>Kuracja peptydowa</b> – intensywna kuracja skóry głowy z kompleksem peptydów, wspierająca cebulki i zagęszczenie włosów."),
+                ("p", "<b>Mezoterapia skóry głowy</b> – preparat z peptydami i witaminami, który wzmacnia włosy i poprawia kondycję skóry głowy."),
+                ("p", "Najlepszą metodę dobieram po wywiadzie i ocenie skóry głowy – czasem łączymy kilka z nich."),
+            ]),
+            ("Jak wygląda zabieg?", [
+                ("ol", [
+                    "wywiad i ocena skóry głowy oraz włosów,",
+                    "dezynfekcja skóry głowy,",
+                    "przy osoczu – pobranie krwi i wirowanie,",
+                    "podanie preparatu drobnymi nakłuciami w skórę głowy.",
+                ]),
+                ("p", "Zabieg trwa 30–40 minut. Najlepsze efekty daje seria kilku zabiegów w odstępach kilku tygodni."),
+            ]),
+            ("Po zabiegu", [
+                ("ul", [
+                    "skóra głowy może być przez chwilę tkliwa lub zaczerwieniona,",
+                    "nie myj głowy do następnego dnia,",
+                    "przez 2–3 dni unikaj sauny, basenu i intensywnego wysiłku,",
+                    "z farbowaniem i zabiegami fryzjerskimi poczekaj kilka dni.",
+                ]),
+            ]),
+            ("Przeciwwskazania", [
+                ("p", "M.in. ciąża i karmienie piersią, aktywne infekcje i stany zapalne skóry głowy, choroby nowotworowe, aktywna faza chorób autoimmunologicznych, a przy osoczu także zaburzenia krzepnięcia, leki przeciwkrzepliwe i anemia. Wszystko omawiamy przed zabiegiem."),
+            ]),
+        ],
+        "prices": [
+            ("Leczenie wypadania włosów osoczem bogatopłytkowym", "od 550 zł", "30 min"),
+            ("Terapia wypadania włosów – kuracja peptydowa", "670 zł", "40 min"),
+            ("Terapia wypadania włosów – mezoterapia skóry głowy", "600 zł", "30 min"),
+            ("Bezpłatna konsultacja online", "0 zł", "15 min"),
+        ],
+        "faq": [
+            ("Kiedy widać efekty?", "Włosy rosną powoli, dlatego potrzeba cierpliwości. Zwykle najpierw zauważalnie zmniejsza się wypadanie, a nowe, krótkie włosy pojawiają się po kilku miesiącach od rozpoczęcia terapii."),
+            ("Ile zabiegów potrzebuję?", "Zwykle serię kilku zabiegów w odstępach kilku tygodni, a później zabiegi podtrzymujące. Plan ustalamy po ocenie skóry głowy."),
+            ("Czy zabieg boli?", "Nakłucia skóry głowy są odczuwalne, ale krótkie. Większość osób dobrze je znosi."),
+            ("Czy terapia pomoże przy łysieniu hormonalnym?", "Zabiegi w gabinecie mogą wspierać leczenie, ale nie zastąpią diagnostyki i terapii u lekarza. Przy łysieniu o podłożu hormonalnym zawsze polecam najpierw konsultację lekarską."),
         ],
     },
 ]
@@ -386,7 +507,7 @@ def render(page):
                 "address": {"@type": "PostalAddress", "streetAddress": "ul. Michała Żaka 19/3U", "postalCode": "30-612", "addressLocality": "Kraków", "addressCountry": "PL"},
             },
             "offers": [
-                {"@type": "Offer", "name": n, "price": p.replace(" zł", ""), "priceCurrency": "PLN"} for n, p, _ in page["prices"]
+                {"@type": "Offer", "name": n, "price": re.sub(r"[^0-9]", "", p), "priceCurrency": "PLN"} for n, p, _ in page["prices"]
             ],
         },
         {
