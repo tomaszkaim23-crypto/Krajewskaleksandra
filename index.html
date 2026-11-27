@@ -32,7 +32,7 @@
   "areaServed": "Kraków",
   "priceRange": "0–990 zł",
   "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5.0", "reviewCount": "66" },
-  "sameAs": ["https://www.instagram.com/olakrajevska/", "https://booksy.com/pl-pl/dl/show-business/313287", "https://maps.app.goo.gl/e7NhJaSWvnFcoJe88"]
+  "sameAs": ["https://www.instagram.com/olakrajevska/", "https://www.facebook.com/aleksandrakrajewskastudio/", "https://booksy.com/pl-pl/dl/show-business/313287", "https://maps.app.goo.gl/e7NhJaSWvnFcoJe88"]
 }
 </script>
 
@@ -375,6 +375,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
         <dt>Parking</dt><dd>Bezpłatny, bezpośrednio przed lokalem</dd>
         <dt>Telefon</dt><dd><a class="js-tel" href="#">533 292 100</a></dd>
         <dt>Instagram</dt><dd><a class="js-insta" href="#" target="_blank" rel="noopener">@olakrajevska</a></dd>
+        <dt>Facebook</dt><dd><a class="js-fb" href="#" target="_blank" rel="noopener">Aleksandra Krajewska Studio</a></dd>
       </dl>
     </div>
     <div class="map">
@@ -386,7 +387,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 <footer>
   <div class="wrap">
     <span>© <span id="yr"></span> Aleksandra Krajewska Studio · ul. Michała Żaka 19/3U, Kraków</span>
-    <span><a class="js-insta" href="#" target="_blank" rel="noopener">Instagram</a> · <a class="js-booksy" href="#" target="_blank" rel="noopener">Booksy</a> · <a class="js-review" href="#" target="_blank" rel="noopener">Opinie Google</a></span>
+    <span><a class="js-insta" href="#" target="_blank" rel="noopener">Instagram</a> · <a class="js-fb" href="#" target="_blank" rel="noopener">Facebook</a> · <a class="js-booksy" href="#" target="_blank" rel="noopener">Booksy</a> · <a class="js-review" href="#" target="_blank" rel="noopener">Opinie Google</a></span>
   </div>
 </footer>
 
@@ -404,6 +405,7 @@ const CONFIG = {
   phone:     "+48533292100",
   booksy:    "https://booksy.com/pl-pl/dl/show-business/313287",
   instagram: "https://www.instagram.com/olakrajevska/",
+  facebook:  "https://www.facebook.com/aleksandrakrajewskastudio/",
   googleReview: "https://g.page/r/CXAGHwpZkHUbEBM/review",
   maps:      "https://maps.app.goo.gl/e7NhJaSWvnFcoJe88"
 };
@@ -412,6 +414,7 @@ const CONFIG = {
 const $$ = s => document.querySelectorAll(s);
 $$(".js-booksy").forEach(a => a.href = CONFIG.booksy);
 $$(".js-insta").forEach(a => a.href = CONFIG.instagram);
+document.querySelectorAll(".js-fb").forEach(a => a.href = CONFIG.facebook);
 $$(".js-review").forEach(a => a.href = CONFIG.googleReview);
 $$(".js-maps").forEach(a => a.href = CONFIG.maps);
 $$(".js-tel").forEach(a => a.href = "tel:" + CONFIG.phone);
